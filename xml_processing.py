@@ -1,6 +1,7 @@
 import os
 import datetime
 import xml.etree.ElementTree as ET
+import logging
 
 def get_file_names(path):
     # Check if the path exists and is a directory
@@ -9,7 +10,8 @@ def get_file_names(path):
         files = os.listdir(path)
         return files
     else:
-        print("Error: The provided path is not a directory.")
+        logging.error("The provided path (%s) is not a directory", path)
+        # print("Error: The provided path is not a directory.")
         return []
     
 

@@ -1,4 +1,4 @@
-# import logging
+import logging
 import xml.etree.ElementTree as ET
 import psycopg2
 import sys
@@ -17,7 +17,9 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 
 if __name__ == "__main__":
-    # setup_logging()
+    setup_logging()
+    logging.info('Main program started')
+
     print("Read Data from XML")
 
     folder_path = input("Enter the folder path containing XML files: ")
@@ -67,9 +69,11 @@ if __name__ == "__main__":
                     if item not in Final_List:
                         Final_List.append(item)
                             
-            print(file,"is processed")
+            logging.info('%s processed', file)
+            # print(file,"is processed")
 
         except Exception as e:
+            logging.error('%s not processed', file)
             print(f"Error processing XML file: {file}")
 
     try:
@@ -95,10 +99,10 @@ if __name__ == "__main__":
                     old_temp_table_row_count = row_count_of_table(cursor, temp_table)
                     execute_query_from_dic(cursor, sql_temp_table_update_queries, (table_name))
                     cur_temp_table_row_count = row_count_of_table(cursor, temp_table)
-                    print("Temporary Table Update!")
+                    # print("Temporary Table Update!")
                 else:
                     execute_query_from_dic(cursor, sql_temp_table_create_queries, (table_name))
-                    print(f"Create {table_name} table and insert data!")
+                    # print(f"Create {table_name} table and insert data!")
                     cur_temp_table_row_count = row_count_of_table(cursor, temp_table)
 
                 # After the Read the XML files and insert data into tables
