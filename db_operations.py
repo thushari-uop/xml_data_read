@@ -217,3 +217,22 @@ def current_table_update(cursor, temp_table, current_table):
         print(f"Error updating current tables: {e}")
 
 
+# check the all columns exist
+def ensure_columns_exist(cursor, table_name, required_columns):
+    for column in required_columns:
+        if column.endswith('Id'):
+            column_type = 'INT'
+        elif column.endswith('Date'):
+            column_type = 'TIMESTAMP'
+        else:
+            column_type = 'VARCHAR'
+
+        cursor.execute(f"""
+        DO $$
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                            WHERE table_name='{table_name}' AND column_name='{column}') THEN
+                ALTER TABLE {table_name} ADD COLUMN "{column}" {column_type};
+            END IF;
+        END$$;
+        """)

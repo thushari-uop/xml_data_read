@@ -144,7 +144,7 @@ sql_temp_table_create_queries = {
     'requirements_components_wise': """
                             -- SQL query for temp_requirements_components_wise create
                             BEGIN; 
-                            CREATE TABLE requirements_components_wise AS SELECT DISTINCT
+                            CREATE TABLE temp_requirements_components_wise AS SELECT DISTINCT
                                 "Report_RequirementData_Requirement_RequirementId" AS requirement_id,
                                 "Report_RequirementData_Requirement_Name" AS requirement_name,
                                 "Report_RequirementData_Requirement_AuthorId" AS author_id,

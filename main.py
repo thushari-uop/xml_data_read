@@ -7,8 +7,8 @@ from multiprocessing import Pool
 from multiprocessing import Pool
 from config import get_predefined_tag_string, get_predefined_temp_table_name, get_predefined_cur_table_name, get_histry_table_name, connection_string, setup_logging
 from xml_processing import get_file_names, has_repeated_immediate_child_tags, parallelProcess
-from db_operations import create_table_and_insert_data, table_exists, execute_query_from_dic, row_count_of_table, row_count_of_distinct_rows, drop_table, histry_update, current_table_update
-from utilities.table_update_query import sql_temp_table_update_queries
+from db_operations import create_table_and_insert_data, table_exists, execute_query_from_dic, row_count_of_table, row_count_of_distinct_rows, drop_table, histry_update, current_table_update, ensure_columns_exist
+from utilities.table_update_query import sql_temp_table_update_queries, required_columns_dict
 from utilities.table_create_query import sql_temp_table_create_queries
 
 
@@ -68,9 +68,8 @@ if __name__ == "__main__":
                 for item in sublist:
                     if item not in Final_List:
                         Final_List.append(item)
-                            
+                                        
             logging.info('%s processed', file)
-            # print(file,"is processed")
 
         except Exception as e:
             logging.error('%s not processed', file)
@@ -81,6 +80,8 @@ if __name__ == "__main__":
             with conn.cursor() as cursor:
 
                 create_table_and_insert_data(cursor, Final_List, table_name)
+                required_columns = required_columns_dict[table_name]
+                ensure_columns_exist(cursor, table_name, required_columns)
 
                 old_cur_table_row_count = 0
 
@@ -149,6 +150,7 @@ if __name__ == "__main__":
                                 
             conn.commit()
 
+        logging.info('Main program started')
 
     except psycopg2.Error as e:
         print("Error:", e)
