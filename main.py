@@ -73,6 +73,7 @@ if __name__ == "__main__":
 
         except Exception as e:
             logging.error('%s not processed', file)
+            logging.error(e)
             print(f"Error processing XML file: {file}")
 
     try:
